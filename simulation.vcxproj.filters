@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{722d31e2-17a6-4e44-92de-017bbb0c63ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\Fragment">
+      <UniqueIdentifier>{39929cc7-6424-4640-99fc-bba7fda5d7dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\Tess Control">
+      <UniqueIdentifier>{50f52ed3-59bb-451a-ab03-72d36fd26003}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\Tess Eval">
+      <UniqueIdentifier>{9ea26806-0444-4f4d-99eb-09e918bdddd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\Geometry">
+      <UniqueIdentifier>{157ca7a9-f8b9-44dd-b361-f46024a26a20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\Vertex">
+      <UniqueIdentifier>{614ce0f8-52bd-4180-88dd-d1df7f96487c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OBJLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Metaball.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundingObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundingSphere.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundingPoly.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MetaSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Inertia.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Spring.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Octree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OctCell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OBJLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Metaball.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingSphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingPoly.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MetaSurface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateTexture.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Inertia.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Spring.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Octree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OctCell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\shaders\Fragment\basic.frag">
+      <Filter>Resource Files\Shaders\Fragment</Filter>
+    </None>
+    <None Include="resources\shaders\Geometry\metaball.geom">
+      <Filter>Resource Files\Shaders\Geometry</Filter>
+    </None>
+    <None Include="resources\shaders\Vertex\basic.vert">
+      <Filter>Resource Files\Shaders\Vertex</Filter>
+    </None>
+    <None Include="resources\shaders\Vertex\metaball.vert">
+      <Filter>Resource Files\Shaders\Vertex</Filter>
+    </None>
+    <None Include="resources\shaders\Fragment\metaball.frag">
+      <Filter>Resource Files\Shaders\Fragment</Filter>
+    </None>
+    <None Include="resources\shaders\Fragment\core.frag">
+      <Filter>Resource Files\Shaders\Fragment</Filter>
+    </None>
+    <None Include="resources\shaders\Fragment\core_blue.frag">
+      <Filter>Resource Files\Shaders\Fragment</Filter>
+    </None>
+    <None Include="resources\shaders\Fragment\core_green.frag">
+      <Filter>Resource Files\Shaders\Fragment</Filter>
+    </None>
+    <None Include="resources\shaders\Fragment\core_red.frag">
+      <Filter>Resource Files\Shaders\Fragment</Filter>
+    </None>
+    <None Include="resources\shaders\Fragment\core_transp.frag">
+      <Filter>Resource Files\Shaders\Fragment</Filter>
+    </None>
+    <None Include="resources\shaders\Fragment\transp.frag">
+      <Filter>Resource Files\Shaders\Fragment</Filter>
+    </None>
+    <None Include="resources\shaders\Vertex\core.vert">
+      <Filter>Resource Files\Shaders\Vertex</Filter>
+    </None>
+  </ItemGroup>
+</Project>
