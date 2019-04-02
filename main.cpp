@@ -45,13 +45,13 @@ int flags[5] = { 1, 0, 0, 0, 1 };
 GLuint tbo;
 GLuint tbo_tex;
 GLuint txr;
-GLuint txr2;
 
 bool drawCollisionSpheres = false;
 
 using namespace std;
 using namespace glm;
 
+// Data streaming functions for frame rate results
 void OpenStream(string path, ofstream &file)
 {
 	file.open(path);
@@ -85,6 +85,7 @@ void CreateSphere(vector<BoundingObject*>& objs, vector<Mesh>& meshes, float r, 
 	objs.push_back(a);
 }
 
+// Demo setups
 void Demo1(MetaSurface* surf, vector<BoundingObject*>& objs, vector<Mesh>& meshes, vector<Spring>& springs)
 {
 	for (int i = 0; i < 20; i++)
@@ -365,6 +366,8 @@ void Demo4(MetaSurface* surf, vector<BoundingObject*>& objs, vector<Mesh>& meshe
 	m3.GetTransform()->SetDrag(0.3f);
 	surf->AddMetaball(m3);
 }
+
+// Experimental setups
 void ControlA(MetaSurface* surf, vector<BoundingObject*>& objs, vector<Mesh>& meshes, vector<Spring>& springs)
 {
 	CreateSphere(objs, meshes, 1.0f, vec3(0.0f, 15.0f, 0.0f), vec3(0.0f, 0.0f, 0.0f));
@@ -479,9 +482,6 @@ int main()
 		std::cin >> NoSpheres;
 	}
 	
-
-	
-	//Sleep(1);
 	// create application
 	Application app = Application::Application();
 	app.initRender();
@@ -489,6 +489,7 @@ int main()
 
 	std::srand(glfwGetTime());
 
+	// an attempt at octree optimisation that proved unfruitful
 	Octree octree = Octree(3, vec3(10.0f, 10.0f, 10.0f));
 
 	vector<Mesh> meshes;
@@ -577,10 +578,6 @@ int main()
 			surfScale = vec3((3.0f * dims) + (dims / 4.0f), height, (3.0f * dims) + (dims / 4.0f));
 		}
 	}
-
-	/*float density = 1.0f;
-	if (format == '6')
-		density = 8.0f;*/
 
 	// Create metaballs
 	MetaSurface* surface = new MetaSurface(thresh, fMult, pos, surfScale + (vec3(1.0f) * (1.0f / pow(thresh, 2.0f))), dens);
@@ -691,7 +688,6 @@ int main()
 	}
 
 	vector<float> posVals;
-	vector<float> radii;
 
 	// time
 	GLfloat firstFrame = (GLfloat) glfwGetTime();
@@ -719,6 +715,7 @@ int main()
 
 		vector<BoundingSphere>& spheres = surface->GetBoundSpheres();
 
+		// Begin frame rate tests if there is collision between any sphere and the surface
 		if (!controlBegun)
 		{
 			for (int i = 0; i < spheres.size() && !controlBegun; i++)
@@ -759,6 +756,7 @@ int main()
 
 		vector<Metaball>& metaBalls = surface->GetMetaballs();
 
+		// Update demo scenarios. Some have springs for example
 		if (exper == "Demo")
 		{
 			if (format == '1')
@@ -824,30 +822,10 @@ int main()
 					}
 				}
 			}
-			else if (format == '5')
-			{
-				/*for (int i = 0; i < metaBalls.size(); i++)
-				{
-					Transform* tM = metaBalls[i].GetTransform();
-					tM->AddForce(vec3(0.0f, (-5.0f * tM->GetMass()), 0.0f));
-
-					if (t > 5.0f)
-					{
-						tM->AddForce(vec3(4.0f  * sin(t - 5.0f), 4.0f  * sin(t - 5.0f + (tM->GetPosVec()[2] / 2.0f)), 0.0f));
-					}
-				}
-				for (int i = 0; i < springs.size() - 1; i++)
-				{
-					springs[i].ApplyForce();
-				}*/
-			}
 		}
 
 		surface->Update(deltaTime);
-
-		/*
-		**	RENDER 
-		*/		
+	
 		// clear buffer
 		app.clear();
 
@@ -865,15 +843,9 @@ int main()
 			posVals.push_back(metaBalls[i].GetTransform()->GetPosVec().y);
 			posVals.push_back(metaBalls[i].GetTransform()->GetPosVec().z);
 			posVals.push_back(spheres[i].GetRadius());
-
-			/*radii.push_back(spheres[i].GetRadius());
-			radii.push_back(1.0f);
-			radii.push_back(1.0f);
-			radii.push_back(1.0f);*/
 		}
 
 		txr = Create1DTexture(posVals, GL_RGBA);
-		//txr2 = Create1DTexture(radii, GL_RGBA);
 
 		// Draw surface
 		app.useMeshShader(*surface);
@@ -897,11 +869,10 @@ int main()
 		// Clear and delete data
 		posVals.clear();
 		glDeleteTextures(1, &txr);
-		radii.clear();
-		glDeleteTextures(1, &txr2);
 
 		app.display();
 
+		// write frame rates to csv
 		if (exper != "Demo")
 		{
 			if (samples < 1000 && controlBegun)

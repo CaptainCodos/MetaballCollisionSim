@@ -36,6 +36,7 @@ private:
 	float m_threshold;
 	float m_mult;
 	float m_density;
+	float m_limits;
 
 	GLuint m_txr;
 	std::vector<float> m_posVals;

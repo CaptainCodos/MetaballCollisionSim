@@ -227,6 +227,7 @@ void CollisionHandler::SphereToSphere(BoundingSphere* a, BoundingSphere* b, ColM
 	}
 }
 
+// Not used
 ColManifold CollisionHandler::SphereToPolyData(BoundingSphere* a, BoundingPoly* b)
 {
 	Transform* tA = a->GetTransform();
@@ -368,6 +369,7 @@ ColManifold CollisionHandler::SphereToPolyData(BoundingSphere* a, BoundingPoly* 
 	}
 	
 }
+// Not used
 void CollisionHandler::SphereToPoly(BoundingSphere* a, BoundingPoly* b, ColManifold& data)
 {
 	Transform* tA = data.refObj->GetTransform();
@@ -444,6 +446,7 @@ void CollisionHandler::SphereToPoly(BoundingSphere* a, BoundingPoly* b, ColManif
 	}
 }
 
+// Not usedd
 void CollisionHandler::PolyToPoly(BoundingPoly* a, BoundingPoly* b, ColManifold& data)
 {
 
@@ -460,7 +463,6 @@ void CollisionHandler::CollideMeta(BoundingObject* a, MetaSurface* b)
 		PolyToMeta(poly, b);
 	}
 }
-
 void CollisionHandler::SphereToMeta(BoundingSphere* a, MetaSurface* m)
 {
 	vector<BoundingSphere>& spheres = m->GetBoundSpheres();
@@ -507,6 +509,7 @@ void CollisionHandler::SphereToMeta(BoundingSphere* a, MetaSurface* m)
 	}
 }
 
+// Not used
 void CollisionHandler::PolyToMeta(BoundingPoly* a, MetaSurface* m)
 {
 	vector<BoundingSphere>& spheres = m->GetBoundSpheres();

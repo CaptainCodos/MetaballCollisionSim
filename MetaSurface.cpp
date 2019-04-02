@@ -10,7 +10,7 @@ MetaSurface::MetaSurface(float thresh, float mult, vec3 p, vec3 s, float vertDen
 {
 	m_threshold = thresh;
 	m_mult = mult;
-
+	m_limits = 5.0f * (1.0f / pow(m_threshold, 0.5f));
 	m_transform->SetPos(p);
 
 	m_mode = GL_POINTS;
@@ -128,7 +128,7 @@ void MetaSurface::UpdateVerts(float density, vec3 s)
 		}
 	}
 
-	//create mesh
+	// create voxel vertices
 	initMesh(v.data(), v.size());
 }
 
@@ -154,7 +154,7 @@ void MetaSurface::UpdateRads()
 	float threshRoute = pow(m_threshold, 0.5f);
 	
 	float rBase = 1.0f / threshRoute;
-	float limDist = 5.0f * rBase;
+	float limDist = m_limits;
 
 	for (int n = 0; n < m_metaballs.size(); n++)
 	{
@@ -177,46 +177,40 @@ void MetaSurface::UpdateRads()
 
 			if (dist != vec3())
 			{
+				// To ensure evaluation stability, the limits must be treated the same as distance l
 				if (l <= limDist + 1.0f)
-				{
 					dists.push_back(l);
-					
-				}
 				else
-				{
 					continue;
-				}
 			}
 			else
 			{
 				dists.push_back(0.0f);
-				//float mult = pow(count, 0.5f) - pow(count - 1.0f, 0.5f);
-				//prev = mult;
-				//float infL = (1.0f / pow((limDist + 1.0f), 2.0f));
-				//float fact = rBase / (1.0f - infL);
-				//
-				//float inf = fact * mult;
-				//r += inf;
 			}
-			
 		}
 
+		// sort so lowest distances come first
 		std::sort(dists.begin(), dists.end(), less<float>());
+
 		for (int i = 0; i < dists.size(); i++)
 		{
+			// take current distance
 			float l = dists[i];
 
-			count += 1.0f;
+			// calculate contribution this metaball makes to the radius
+			float mult = pow(count + 1.0f, 0.5f) - pow(count, 0.5f);
 
-			/*float first = (-2.0f * atanf(2.0f * (l - rBase))) / pi<float>();
-			float second = (2.0f * atanf(2.0f * (limDist - rBase))) / pi<float>();
-			r += m_mult * (rBase / second) * (first + second);*/
-			float mult = pow(count, 0.5f) - pow(count - 1.0f, 0.5f);
-			//prev = count;
+			// calculate influence at the evaluation limits
 			float infL = (1.0f / pow((limDist + 1.0f), 2.0f));
+
+			// calculate the factor by which we ensure the value at l = 0 is rBase
 			float fact = rBase / (1.0f - infL);
+
+			// calculate value to add with respect to the current contribution
 			float inf = (fact * std::min((1.0f / pow(l + 1.0f, 2.0f)), 1.0f)) * mult;
 			r += inf;
+
+			count += 1.0f;
 		}
 
 		m_spheres[n].SetRadius(rBase + (r));
@@ -239,12 +233,14 @@ void MetaSurface::SetUniforms()
 	GLint MLoc = glGetUniformLocation(m_shader.Program, "M");
 	GLint thresholdLoc = glGetUniformLocation(m_shader.Program, "threshold");
 	GLint cellSizeLoc = glGetUniformLocation(m_shader.Program, "cellSize");
+	GLint limLoc = glGetUniformLocation(m_shader.Program, "limits");
 	GLint dirLoc = glGetUniformLocation(m_shader.Program, "lightDir");
 
-	// Pass the model matrix to the shader
+	// Pass relevant data to the shader
 	glUniformMatrix4fv(MLoc, 1, GL_FALSE, glm::value_ptr(getModel()));
 	glUniform1f(thresholdLoc, m_threshold);
 	glUniform1f(cellSizeLoc, 1.0f / m_density);
+	glUniform1f(limLoc, m_limits);
 	glUniform3fv(dirLoc, 1, value_ptr(glm::normalize(vec3(-1.0f, -1.0f, -1.0f))));
 
 	glBindVertexArray(getVertexArrayObject());
@@ -253,18 +249,11 @@ void MetaSurface::SetUniforms()
 
 void MetaSurface::SetPosUniforms(GLuint &txr)
 {
+	// Pass metaball data to the shader
 	GLint buffLoc = glGetUniformLocation(m_shader.Program, "metaballs");
-	//GLint buffLoc2 = glGetUniformLocation(m_shader.Program, "metaballs2");
 	glActiveTexture(GL_TEXTURE0 + 0);
 	glBindTexture(GL_TEXTURE_1D, txr);
 	glUniform1i(buffLoc, 0);
-	//glUniform1i(buffLoc2, 0);
-
-	//GLint radLoc = glGetUniformLocation(m_shader.Program, "rads");
-	////GLint buffLoc2 = glGetUniformLocation(m_shader.Program, "metaballs2");
-	//glActiveTexture(GL_TEXTURE0 + 1);
-	//glBindTexture(GL_TEXTURE_1D, txr2);
-	//glUniform1i(radLoc, 1);
 
 	GLint numLoc = glGetUniformLocation(m_shader.Program, "number");
 	glUniform1i(numLoc, m_metaballs.size());
