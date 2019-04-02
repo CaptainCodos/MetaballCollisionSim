@@ -14,7 +14,6 @@
 #include "Camera.h"
 #include "Mesh.h"
 
-
 class Application
 {
 

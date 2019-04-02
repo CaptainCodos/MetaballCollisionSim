@@ -17,13 +17,15 @@
 /* 
 ** VERTEX CLASS 
 */
-class Vertex {
+class Vertex 
+{
 public:
 	Vertex()
 	{
 		this->coord = glm::vec3(0.0f, 0.0f, 0.0f);
 	}
-	Vertex(const glm::vec3& coord) {
+	Vertex(const glm::vec3& coord) 
+	{
 		this->coord = coord;
 	}
 
@@ -68,59 +70,29 @@ enum BasicShapeType
 	Tetrahedron
 };
 
-/* 
-** MESH CLASS 
-*/
+
 class Mesh
 {
 public:
-	/*
-	** CONSTRUCTORS
-	*/
-
-	// default constructor creates a horizontal plane or dimensions 1 x 1 centered on the origin
 	Mesh();
 	Mesh(BasicShapeType shape);
-	// create mesh from a .obj file
-	Mesh(const std::string& fileName);
 	virtual ~Mesh();
 
-
-	/*
-	** GET AND SET METHODS
-	*/
-
-	// getModel computes the model matrix any time it is required
-	//glm::vec3 getPos() const { return getTranslate()[3]; }
 	virtual glm::mat4 getModel() { return m_transform->GetFullMat(); }
-	/*glm::mat4 getTranslate() const{ return m_translate; }
-	glm::mat4 getRotate() const{ return m_rotate; }
-	glm::mat4 getScale() const{ return m_scale; }
-	glm::vec3 getScaleVec() const { return glm::vec3(m_scale[0][0], m_scale[1][1], m_scale[2][2]); }*/
 	Transform* GetTransform() { return m_transform; }
 	Shader getShader() const { return m_shader; }
 	GLuint getVertexArrayObject() const{ return m_vertexArrayObject; }
 	unsigned int getNumIndices() const{ return m_numIndices; }
 	GLenum getMode() const { return m_mode; }
 
-	// set position of mesh center to specified 3D position vector
 	void setPos(glm::vec3 p) { m_transform->SetPos(p); }
-	// set i_th coordinate of mesh center to float p (x: i=0, y: i=1, z: i=2)
 	void setPos(int i, float p) { m_transform->SetPos(i, p); }
 
-	//// set rotation matrix
-	//void setRotate(const glm::mat4 &mat) { m_rotate = mat; }
-
-	// allocate shader to mesh
+	// assign shader to mesh
 	void setShader(const Shader &shader) {
 		m_shader = shader;
 		m_shader.Use();
 	}
-
-
-	/* 
-	** INITIALISATION AND UTILITY METHODS
-	*/
 
 	// initialise transform matrices to identity
 	void initTransform();
@@ -136,19 +108,6 @@ public:
 		std::vector < glm::vec2 > & out_uvs,
 		std::vector < glm::vec3 > & out_normals
 	);
-
-
-	/*
-	** TRANSFORMATION METHODS
-	*/
-	
-	//// translate mesh by a vector
-	//void translate(const glm::vec3 &vect);
-	//// rotate mesh by a vector
-	//void rotate(const float &angle, const glm::vec3 &vect);
-	//// scale mesh by a vector
-	//void scale(const glm::vec3 &vect);
-
 	virtual void SetUniforms();
 protected:
 	enum {
@@ -166,10 +125,6 @@ protected:
 	GLenum m_mode;
 
 	Transform* m_transform;
-
-	/*glm::mat4 m_translate;
-	glm::mat4 m_rotate;
-	glm::mat4 m_scale;*/
 
 	Shader m_shader;
 };
