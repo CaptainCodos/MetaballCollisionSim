@@ -194,10 +194,6 @@ void Demo1(MetaSurface* surf, vector<BoundingObject*>& objs, vector<Mesh>& meshe
 		springs.push_back(s1);
 		springs.push_back(s2);
 	}
-
-	/*vector<Metaball>& metaBalls = surf->GetMetaballs();
-
-	metaBalls[0].GetTransform()->SetPos(vec3(15.0f, 1.0f, 15.05 - 8.0f));*/
 }
 void Demo2(MetaSurface* surf, vector<BoundingObject*>& objs, vector<Mesh>& meshes, vector<Spring>& springs)
 {
@@ -432,7 +428,7 @@ void SetupB(MetaSurface* surf, vector<BoundingObject*>& objs, vector<Mesh>& mesh
 	}
 }
 
-// main function
+// Main function
 int main()
 {
 	int dims;
@@ -482,14 +478,14 @@ int main()
 		std::cin >> NoSpheres;
 	}
 	
-	// create application
+	// Create application
 	Application app = Application::Application();
 	app.initRender();
 	Application::camera.setCameraPosition(glm::vec3(0.0f, 5.0f, 20.0f));
 
 	std::srand(glfwGetTime());
 
-	// an attempt at octree optimisation that proved unfruitful
+	// An attempt at octree optimisation that proved unfruitful
 	Octree octree = Octree(3, vec3(10.0f, 10.0f, 10.0f));
 
 	vector<Mesh> meshes;
@@ -555,7 +551,6 @@ int main()
 	{
 		if (format == '1')
 		{
-			//dims = 10;
 			height = 20.0f;
 
 			pos = vec3((3.0f * dims) / 2.0f, 0.0f, (3.0f * dims) / 2.0f);
@@ -563,7 +558,6 @@ int main()
 		}
 		else if (format == '2')
 		{
-			//dims = 20;
 			height = 20.0f;
 
 			pos = vec3((3.0f * dims) / 2.0f, 0.0f, (3.0f * dims) / 2.0f);
@@ -571,7 +565,6 @@ int main()
 		}
 		else if (format == '3')
 		{
-			//dims = 30;
 			height = 40.0f;
 
 			pos = vec3((3.0f * dims) / 2.0f, 0.0f, (3.0f * dims) / 2.0f);
@@ -689,7 +682,7 @@ int main()
 
 	vector<float> posVals;
 
-	// time
+	// Get time of first frame
 	GLfloat firstFrame = (GLfloat) glfwGetTime();
 	
 	// Game loop
@@ -697,15 +690,13 @@ int main()
 	{
 		// Set frame time
 		GLfloat currentFrame = (GLfloat)  glfwGetTime() - firstFrame;
-		// the animation can be sped up or slowed down by multiplying currentFrame by a factor.
+		// Simulation speed
 		currentFrame *= 1.0f;
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		t += deltaTime;
-		/*
-		**	INTERACTION
-		*/
-		// Manage interaction
+		
+		// Manage camera
 		app.doMovement(deltaTime);
 
 		if (Application::keys[GLFW_KEY_1])
@@ -730,7 +721,7 @@ int main()
 			}
 		}
 
-		// do collisions
+		// Do collisions
 		for (int i = 0; i < objs.size(); i++)
 		{
 			for (int k = i + 1; k < objs.size(); k++)
@@ -829,14 +820,14 @@ int main()
 		// clear buffer
 		app.clear();
 
-		// draw meshes
+		// Draw meshes
 		for (int i = 0; i < meshes.size(); i++)
 		{
 			app.useMeshShader(meshes[i]);
 			app.draw(meshes[i]);
 		}
 
-		// get metaball positions and gather into a texture for shader
+		// Get metaball positions and gather into a texture for shader
 		for (int i = 0; i < metaBalls.size(); i++)
 		{
 			posVals.push_back(metaBalls[i].GetTransform()->GetPosVec().x);
@@ -872,7 +863,7 @@ int main()
 
 		app.display();
 
-		// write frame rates to csv
+		// Write frame rates to csv
 		if (exper != "Demo")
 		{
 			if (samples < 1000 && controlBegun)
