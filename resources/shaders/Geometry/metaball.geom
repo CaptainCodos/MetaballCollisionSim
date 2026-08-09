@@ -23,7 +23,9 @@ uniform mat4 M;
 uniform mat4 view;
 uniform mat4 projection;
 
-vec4 SamplePositions(int idx);
+
+
+
 vec4 SamplePositions(int idx)
 {
 	float unit = (1.0f / float(number));
@@ -32,9 +34,8 @@ vec4 SamplePositions(int idx)
 	float s = h + (unit * idx);
 
 	return texture(metaballs, s).rgba;
-}
+};
 
-vec4 SampleRads(int idx);
 vec4 SampleRads(int idx)
 {
 	float unit = (1.0f / float(number));
@@ -43,10 +44,8 @@ vec4 SampleRads(int idx)
 	float s = h + (unit * idx);
 
 	return texture(rads, s).rgba;
-}
+};
 
-
-vec3 GetNormal(vec3 p);
 vec3 GetNormal(vec3 p)
 {
 	float limDist = limits / 4.0f;
@@ -72,9 +71,8 @@ vec3 GetNormal(vec3 p)
 	}
 	
 	return normalize(v);
-}
+};
 
-bool SampleField(vec3 p);
 bool SampleField(vec3 p)
 {
 	float scalarVal = 0.0f;
@@ -106,26 +104,101 @@ bool SampleField(vec3 p)
 	}
 	
 	return scalarVal >= threshold;
-}
+};
 
-void CreateVertex(vec3 p);
+float SampleFieldValue(vec3 p)
+{
+	float scalarVal = 0.0f;
+	
+	float route = pow(threshold, 0.5f);
+	float rBase = 1.0f / route;
+	
+	float limDist = limits / 4.0f;
+	
+	for (int i = 0; i < number; ++i)
+	{
+		vec4 curr = SamplePositions(i);
+		float r = curr.a;
+		
+		float dx = (p.x - curr.r);
+		float dy = (p.y - curr.g);
+		float dz = (p.z - curr.b);
+		
+		float dL = (pow(dx, 2) + pow(dy, 2) + pow(dz, 2));
+		float l = length(vec3(dx, dy, dz));
+		
+		if (l <= limDist)
+		{
+			scalarVal += 1.0f /(dL);
+		}
+	}
+	
+	return scalarVal - threshold;
+};
+
+struct MarchingTetra 
+{
+	vec3 verts[4];
+	vec3 normals[4];
+	float values[4];
+
+	void CreateTetra(vec3 v[4], vec3 n[4], float val[4]) 
+	{
+		verts = v;
+		normals = n;
+		values = val;
+	}
+};
+
+struct MarchingCube 
+{
+	vec3 centre;
+
+	vec3 verts[8];
+	vec3 normals[8];
+	float values[8];
+
+	void CreateCube(vec3 p) {
+		centre = p;
+
+		float offset = cellSize * 0.5;
+		verts[0] = p + vec3(-offset, -offset, -offset);
+		verts[1] = p + vec3(offset, -offset, -offset);
+		verts[2] = p + vec3(offset, -offset, offset);
+		verts[3] = p + vec3(-offset, -offset, offset);
+
+		verts[4] = p + vec3(-offset, offset, -offset);
+		verts[5] = p + vec3(offset, offset, -offset);
+		verts[6] = p + vec3(offset, offset, offset);
+		verts[7] = p + vec3(-offset, offset, offset);
+
+		for (int i = 0; i < 8; i++) 
+		{
+			values[i] = SampleFieldValue(verts[i]);
+			normals[i] = GetNormal(verts[i]);
+		}
+	}
+};
+
 void CreateVertex(vec3 p)
 {
 	gl_Position = projection * view * vec4(p, 1.0f);
 	norm = GetNormal(p);
 	pos = vec3(M * vec4(p, 1.0f));
 	EmitVertex();
-}
-void CreateMesh(vec3 p, int i);
+};
+
 void CreateMesh(vec3 p, int i)
 {
 
 	if (SampleField(p))
 	{
-		CreateVertex(p);
+		MarchingCube cube;
+		cube.CreateCube(p);
+		CreateVertex(cube.centre);
 		EndPrimitive();
 	}
-}
+};
 
 void main(void)
 {
